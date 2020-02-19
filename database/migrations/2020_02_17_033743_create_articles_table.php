@@ -14,15 +14,15 @@ class CreateArticlesTable extends Migration
     public function up()
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('title',255);
+            $table->increments('id');
+            $table->integer('user_id')->unsigned()->index();
+            $table->string('title');
             $table->text('content');
-            $table->timestamps('created_at');
-            $table->timestamps('updated_at');
-            $table->tinyInteger('notification',1);
-            $table->tinyInteger('view_count',4);
-            $table->timestamps('deleted_at');
+            $table->boolean('notification')->default(1);
+            $table->tinyInteger('view_count')->default(0);
+
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -33,6 +33,9 @@ class CreateArticlesTable extends Migration
      */
     public function down()
     {
+        Schema::table('articles', function (Blueprint $table){
+          $table->dropForeign('articles_user_id_foreign');
+        });
         Schema::dropIfExists('articles');
     }
 }
