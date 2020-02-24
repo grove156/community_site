@@ -17,8 +17,10 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('password', 60)->nullable()->change();
+            $table->string('password', 60)->nullable();
             $table->rememberToken();
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
             $table->timestamp('last_login')->nullable();
             $table->string('confirm_code', 60)->nullable();
             $table->boolean('activated')->default(0);
@@ -32,6 +34,8 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('users');
+
     }
 }

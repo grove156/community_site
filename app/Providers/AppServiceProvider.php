@@ -11,6 +11,10 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    protected $subscribe = [
+      \App\Listeners\UsersEventListener::class,
+    ];
+
     public function register()
     {
         //

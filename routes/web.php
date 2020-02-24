@@ -11,40 +11,39 @@
 |
 */
 
-//Route::get('/', function () {
-//    return view('layouts.app');
-//});
+Route::get('home', function () {
+   return view('layouts.app');});
 
 //user registration
 Route::get('auth/register',[
   'as'=>'users.create',
-  'uses'=>'UsersController@create'
+  'uses'=>'UsersController@create',
 ]);
 
 Route::post('auth/register',[
   'as'=>'users.store',
-  'uses'=>'UsersController@store'
+  'uses'=>'UsersController@store',
 ]);
 
 Route::get('auth/confirm/{code}',[
   'as'=>'users.confirm',
-  'uses'=>'UsersController@confirm'
+  'uses'=>'UsersController@confirm',
 ]);
 
 //user authentication
 Route::get('auth/login',[
   'as'=>'sessions.create',
-  'uses'=>'SessionsController@create'
+  'uses'=>'SessionsController@create',
 ]);
 
 Route::post('auth/login',[
   'as'=>'sessions.store',
-  'uses'=>'SessionsController@store'
+  'uses'=>'SessionsController@store',
 ]);
 
 Route::get('auth/logout',[
   'as'=>'sessions.destroy',
-  'uses'=>'SessionsController@destroy'
+  'uses'=>'SessionsController@destroy',
 ]);
 
 //password reset
@@ -55,15 +54,21 @@ Route::get('auth/remind',[
 
 Route::post('auth/remind',[
   'as'=>'remind.store',
-  'uses'=>'PasswordsController@postRemind'
+  'uses'=>'PasswordsController@postRemind',
 ]);
 
 Route::get('auth/reset/{token',[
   'as'=>'reset.create',
-  'uses'=>'PasswordsController@getReset'
+  'uses'=>'PasswordsController@getReset',
 ]);
 
 Route::post('auth/reset',[
   'as'=>'reset.store',
-  'uses'=>'PasswordsController@postReset'
+  'uses'=>'PasswordsController@postReset',
 ]);
+
+Route::get('auth/confirm/{code}',[
+  'as'=>'users.confirm',
+  'uses'=>'UsersController@confirm',
+]);
+//->where('code','[\pL-\pN]{60}');

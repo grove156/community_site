@@ -31,12 +31,13 @@ class CreateVotesTables extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::table('votes', function(Blueprint $table){
-          $table->dropForeign('votes_comment_id_foreign');
-          $table->dropForeign('votes_user_id_foreign');
-        });
-        Schema::dropIfExists('votes');
-    }
+     public function down()
+     {
+         Schema::table('votes', function (Blueprint $table) {
+             $table->dropForeign('votes_comment_id_foreign');
+             $table->dropForeign('votes_user_id_foreign');
+         });
+
+         Schema::dropIfExists('votes');
+     }
 }
