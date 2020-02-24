@@ -38,4 +38,12 @@ class SessionsController extends Controller
 
       return redirect()->intended('home');
     }
+
+    public function destroy()
+    {
+      auth()->logout();
+      flash('See you later!');
+
+      return redirect('/');
+    }
 }
