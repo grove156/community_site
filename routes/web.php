@@ -57,7 +57,7 @@ Route::post('auth/remind',[
   'uses'=>'PasswordsController@postRemind',
 ]);
 
-Route::get('auth/reset/{token',[
+Route::get('auth/reset/{token}',[
   'as'=>'reset.create',
   'uses'=>'PasswordsController@getReset',
 ]);
