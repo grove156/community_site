@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\User;
 
 class PasswordsController extends Controller
 {
@@ -29,8 +30,11 @@ class PasswordsController extends Controller
         'token'=>$token,
         'created_at'=> \Carbon\Carbon::now()->toDateTimeString(),
       ]);
+      $user = User::whereEmail($email)->first();
+      $username = $user->name;
+      //event(new \App\Events\PasswordRemindCreated($email, $token));
 
-      \Mail::send('emails.passwords.reset', compact('token'), function ($message) use($email){
+      \Mail::send('emails.passwords.reset', compact('token','username'), function ($message) use($email){
         $message->to($email);
         $message->subject(
             sprintf('[%s] Reset your Password', config('app.name')),
@@ -46,5 +50,29 @@ class PasswordsController extends Controller
       return view('passwords.reset', compact('token'));
     }
 
+    public function postReset(Request $request)
+    {
+      $this->validate($request, [
+          'email'=>'required|email|exists:users',
+          'password'=>'required|confirmed',
+          'token'=>'required',
+      ]);
+      $token = $request->get('token');
+
+      if(! \DB::table('password_resets')->whereToken($token)->first()){
+        flash('URL is incorrect!');
+        //return back()->withInput();
+      }
+
+      \App\User::whereEmail($request->input('email'))->first()->update([
+        'password'=>bcrypt($request->input('password'))
+      ]);
+
+      \DB::table('password_resets')->whereToken($token)->delete();
+
+      flash('Your password has been changed. Please login with your new password');
+
+      return redirect('/home');
+    }
 
 }

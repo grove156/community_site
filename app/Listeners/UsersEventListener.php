@@ -23,6 +23,11 @@ class UsersEventListener
           \App\Events\UserCreated::class,
           __CLASS__ . '@onUserCreated'
       );
+
+      $events->listen(
+        \App\Events\PasswordRemindCreated::class,
+        __CLASS__ . '@onPasswordRemindCreated'
+      );
     }
 
     public function onUserCreated(\App\Events\UserCreated $event)
@@ -34,6 +39,18 @@ class UsersEventListener
             sprintf('[%s] Please confirm your registration.', config('app.name'))
         );
       });
+    }
+
+    public function onPasswordRemindCreated(\App\Events\PasswordRemindCreated $event)
+    {
+        $param = ['token'=> $event->token, 'username'=>$event->username];
+       \Mail::send('emails.passwords.reset',$param,
+        function ($message) use ($event){
+            $message->to($event->email);
+            $message->subject(
+             sprintf('[%s] reset your password', config('app.name'))
+            );
+        });
     }
     /**
      * Handle the event.
