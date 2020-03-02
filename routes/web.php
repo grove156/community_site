@@ -72,3 +72,9 @@ Route::get('auth/confirm/{code}',[
   'uses'=>'UsersController@confirm',
 ]);
 //->where('code','[\pL-\pN]{60}');
+
+//social login
+Route::get('social/{provider}',[
+  'as'=>'social.login',
+  'uses'=>'SocialController@execute',
+]);

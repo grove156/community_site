@@ -18,7 +18,35 @@ class UsersController extends Controller
       return view('users.create');
     }
 
-    public function store(request $request)
+    public function store(Request $request)
+    {
+      $socialUser = User::whereEmail($request->input('email'))->whereNull('password')->first();
+
+      if($socialUser){
+        return $this->updateSocialAccount($request, $socialUser);
+      }
+
+      return $this->createNativeAccount($request);
+    }
+
+    protected function updateSocialAccount(Request $request, \App\User $user)
+    {
+      $this->validate($request,[
+        'name'=>'required|max:255',
+        'email'=>'required|email|max:255',
+        'password'=>'required|confirmed|min:6',
+      ]);
+
+      $user->update([
+        'name'=> $request->input('name'),
+        'password'=> bcrypt($request->input('password')),
+      ]);
+
+      auth()->login($user);
+      return $this->respondCreated($user->name . ' welcome!');
+    }
+
+    public function createNativeAccount(request $request)
     {
       $this->validate($request, [
         'name'=>'required|max:255',

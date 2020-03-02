@@ -8,6 +8,17 @@
     @endif
 
     <div class="page-header">
+      <p class="text-muted">
+        You can login with your github ID.
+      </p>
+    </div>
+    <div class="form-group">
+      <a class="btn btn-default btn-lg btn-block" href="{{ route('social.login',['github']) }}">
+        <strong><i class="fa fa-github">Login with Github</i></strong></a>
+    </div>
+
+
+    <div class="page-header">
       <h4>
           {{ trans('auth.session.title') }}
       </h4>
