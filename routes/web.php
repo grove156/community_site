@@ -11,8 +11,15 @@
 |
 */
 
-Route::get('home', function () {
-   return view('layouts.app');});
+Route::get('home',[
+  'as'=>'home',
+  'uses'=>'HomeController@index'
+]);
+
+Route::get('/',[
+  'as'=>'root',
+  'uses'=>'WelcomeController@index'
+]);
 
 //user registration
 Route::get('auth/register',[

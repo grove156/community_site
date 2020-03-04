@@ -10,14 +10,14 @@
   </head>
 
   <body id="app-layout">
-{{--   @include('layouts.partial.navigation') --}}
+
 
     <div class="container">
       @include('flash::message')
-  
+
       @yield('content')
     </div>
-  {{--  @include('layouts.partial.footer') --}}
+
 
     <script src="{{ elixir("js/app.js")}}"></script>
     @yield('script')
