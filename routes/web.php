@@ -21,6 +21,9 @@ Route::get('/',[
   'uses'=>'WelcomeController@index'
 ]);
 
+//articles
+Route::resource('articles', 'ArticlesController');
+
 //user registration
 Route::get('auth/register',[
   'as'=>'users.create',

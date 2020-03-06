@@ -5,11 +5,9 @@
     <h4>forum<small> /article lists</small></h4>
   </div>
   <div class="text-right">
-    <a href="{{ route('articles.create') }}" class="btn btn=primary">
-      <i class="fa fa-plus-circle"></i> Writing article
-    </a>
+    <a href="{{ route('articles.create') }}" class="btn btn-primary">
+      <i class="fa fa-plus-circle"></i> Writing article</a>
   </div>
-
   <article>
     @forelse($articles as $article)
       @include('articles.partial.article', compact('article'))
