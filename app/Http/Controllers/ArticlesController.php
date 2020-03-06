@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use App\Article;
+use App\Article;
 class ArticlesController extends Controller
 {
-
+    public function __construct()
+    {
+      $this->middleware('auth',['except'=>'index','show']);
+    }
 
     /**
      * Display a listing of the resource.
@@ -16,7 +19,7 @@ class ArticlesController extends Controller
     public function index()
     {
         //
-        $articles = \App\Article::get();
+        $articles = Article::latest()->paginate(5);
         return view('articles.index', compact('articles'));
     }
 
@@ -28,6 +31,8 @@ class ArticlesController extends Controller
     public function create()
     {
         //
+        $article = new Article;
+        return view('articles.create', compact('article'));
     }
 
     /**
@@ -36,9 +41,17 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\ArticlesRequest $request)
     {
-        //
+
+        //$article = $user->articles()->create(
+        //    $request->getPayload()
+        //  );
+
+        $article = $request->user()->articles()->create($request->all());
+        $article->save();
+
+        return redirect('articles');
     }
 
     /**
@@ -47,9 +60,10 @@ class ArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Article $article)
     {
         //
+        return view('articles.show', compact('article'));
     }
 
     /**
@@ -58,9 +72,11 @@ class ArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(\App\Article $article)
     {
         //
+        $this->authorize('update', $article);
+        return view('articles.edit', compact('article'));
     }
 
     /**
@@ -70,9 +86,12 @@ class ArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(\App\Http\Requests\ArticlesRequest $request, \App\Article $article)
     {
-        //
+        $article->update($request->all());
+        flash()->success('Saved your article!');
+
+        return redirect(route('articles.show', $article->id));
     }
 
     /**
@@ -81,8 +100,11 @@ class ArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(\App\Article $article)
     {
         //
+        $this->authrize('delete', $article);
+        $article->delete();
+        return response()->json([], 204);
     }
 }

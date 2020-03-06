@@ -28,9 +28,14 @@ class User extends Authenticatable
       'activated' => 'boolean',
     ];
 
+    public function isAdmin()
+    {
+      return ($this->id === 1 ? true : false);
+    }
     //relationship
     public function articles()
     {
       return $this->hasMany(Article::class);
     }
+
 }

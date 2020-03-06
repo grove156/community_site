@@ -20,8 +20,11 @@ class Article extends Model
       'deleted_at',
     ];
 
+    protected $with = ['user'];
+
     public function user()
     {
       return $this->belongsTo(User::class);
     }
+
 }

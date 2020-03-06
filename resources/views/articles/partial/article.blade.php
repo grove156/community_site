@@ -1,8 +1,8 @@
 <div class="media">
-  @include('users.partial.avatar', ['user'=>'$article->user'])
+  @include('users.partial.avatar', ['user'=>$article->user])
   <div class="media-body">
     <h4 class="media-heading">
-      <a href="{{ route(articles.show, $article->id)}}">
+      <a href="{{ route('articles.show', $article->id)}}">
         {{$article->title}}
       </a>
     </h4>

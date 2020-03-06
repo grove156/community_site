@@ -20,6 +20,8 @@ class CreateArticlesTable extends Migration
             $table->text('content');
             $table->boolean('notification')->default(1);
             $table->tinyInteger('view_count')->default(0);
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');
