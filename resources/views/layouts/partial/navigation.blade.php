@@ -22,12 +22,12 @@
             <!-- Authentication Links -->
             @if (Auth::guest())
               <li>
-                <a href="{{ route('sessions.create', ['return' => urlencode($currentUrl)]) }}">
+                <a href="{{ route('sessions.create', ['return' => urlencode($currentUrl ?? '')]) }}">
                   {{ trans('auth.sessions.title') }}
                 </a>
               </li>
               <li>
-                <a href="{{ route('users.create', ['return' => urlencode($currentUrl)]) }}">
+                <a href="{{ route('users.create', ['return' => urlencode($currentUrl ?? '')]) }}">
                   {{ trans('auth.users.title') }}
                 </a>
               </li>

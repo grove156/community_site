@@ -8,7 +8,7 @@ class ArticlesController extends Controller
 {
     public function __construct()
     {
-      $this->middleware('auth',['except'=>'index','show']);
+      $this->middleware('auth',['except'=>['index','show']]);
     }
 
     /**
@@ -16,10 +16,10 @@ class ArticlesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($slug = null)
     {
-        //
-        $articles = Article::latest()->paginate(5);
+        $query = $slug ? \App\Tag::whereSlug($slug)->firstOrFail()->articles() : new \App\Article;
+        $articles = $query->latest()->paginate(5);
         return view('articles.index', compact('articles'));
     }
 
@@ -41,17 +41,25 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(\App\Http\Requests\ArticlesRequest $request)
+    public function store(\App\Http\Requests\ArticlesRequest $request, Article $article)
     {
 
         //$article = $user->articles()->create(
         //    $request->getPayload()
         //  );
+        if(! $article){
+          flash()->error(
+            trans('forum.article.error_writing')
+          );
+          return back()->withInput();
+        }
 
+        // 태그 싱크
         $article = $request->user()->articles()->create($request->all());
-        $article->save();
+        $article->tags()->sync($request->input('tags'));
+      //  $article->save();
 
-        return redirect('articles');
+      //  return redirect('articles');
     }
 
     /**
@@ -89,6 +97,7 @@ class ArticlesController extends Controller
     public function update(\App\Http\Requests\ArticlesRequest $request, \App\Article $article)
     {
         $article->update($request->all());
+        $article->tags()->sync($request->input('tags'));
         flash()->success('Saved your article!');
 
         return redirect(route('articles.show', $article->id));

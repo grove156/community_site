@@ -24,6 +24,11 @@ Route::get('/',[
 //articles
 Route::resource('articles', 'ArticlesController');
 
+Route::get('tags/{slug}/articles',[
+  'as'=>'tags.articles.index',
+  'uses'=>'ArticlesController@index'
+]);
+
 //user registration
 Route::get('auth/register',[
   'as'=>'users.create',

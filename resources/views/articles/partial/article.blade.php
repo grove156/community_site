@@ -10,6 +10,10 @@
     <p class="text-muted">
       <i class="fa fa-user"></i> {{$article->user->name}}
       <i class="fa fa-clock-o"></i> {{ $article->created_at->diffForHumans() }}
+      <i class="fa fa-tag"></i>
+      @foreach($article->tags as $tag)
+        {{ $tag->name }}
+      @endforeach
     </p>
   </div>
 </div>
