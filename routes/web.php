@@ -29,6 +29,9 @@ Route::get('tags/{slug}/articles',[
   'uses'=>'ArticlesController@index'
 ]);
 
+//attachment file
+Route::resource('attachments', 'AttachmentsController', ['only'=>['store','destroy']]);
+
 //user registration
 Route::get('auth/register',[
   'as'=>'users.create',

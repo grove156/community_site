@@ -55,20 +55,20 @@ class ArticlesController extends Controller
           return back()->withInput();
         }
 
-        if($request->hasFile('files')){
-          $files = $request->file('files');
-
-          foreach($files as $file)
-          {
-            $filename = Str::random(). filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
-            $file->move(attachments_path(), $filename);
-            $article->attachments()->create([
-              'filename' => $filename,
-              'bytes'=> $file->getSize();
-              'mime'=> $file->getClientMimeType();
-            ]);
-          }
-        }
+//        if($request->hasFile('files')){
+//          $files = $request->file('files');
+//
+//          foreach($files as $file)
+//          {
+//            $filename = Str::random(). filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
+//            $file->move(attachments_path(), $filename);
+//            $article->attachments()->create([
+//              'filename' => $filename,
+//              'bytes'=> $file->getSize();
+//              'mime'=> $file->getClientMimeType();
+//            ]);
+//          }
+//        }
 
         // 태그 싱크
         $article = $request->user()->articles()->create($request->all());

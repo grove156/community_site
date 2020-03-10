@@ -15,5 +15,8 @@
         {{ $tag->name }}
       @endforeach
     </p>
+    @if($viewName === 'articles.show')
+      @include('attachments.partial.list',['attachments'=>$article->attachments])
+    @endif
   </div>
 </div>

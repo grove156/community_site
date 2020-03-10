@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\View;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,9 +28,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
       view()->composer('*', function ($view){
+        $viewName = $view->getName();
+        View::share('viewName', $viewName);
+
         $allTags = \Cache::rememberForever('tags.list', function (){
           return \App\Tag::all();
         });
+
 
         $view->with(compact('allTags'));
       });
