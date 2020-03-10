@@ -3,6 +3,7 @@
   <input type="text" name="title" id="title" value="{{ old('title', $article->title ?? '') }}" class="form-control"/>
   {!! $errors->first('title', '<span class="form-error">:message</span>') !!}
 </div>
+
 <div class="form-group {{$errors->has('content') ? 'has-error' : ''}}">
   <label for="content">content</label>
   <textarea name="content" id="content" rows="10" class="form-control">{{old('content', $article->content ?? '')}}</textarea>
@@ -19,6 +20,12 @@
     @endforeach
   </select>
   {!! $errors->first('tags', '<span class="form-error">:message</span>') !!}
+</div>
+
+<div class="form-group {{$errors->has('files') ? 'has-error' : ''}}">
+  <label for="files">file</label>
+  <input type="file" name="files[]" id="files" class="form-control" multiple="multiple">
+  {!! $errors->first('files.0', '<span class="form-error">:message</span>') !!}
 </div>
 @section('script')
   @parent

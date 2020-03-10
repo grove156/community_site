@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Article;
 class ArticlesController extends Controller
 {
@@ -52,6 +53,21 @@ class ArticlesController extends Controller
             trans('forum.article.error_writing')
           );
           return back()->withInput();
+        }
+
+        if($request->hasFile('files')){
+          $files = $request->file('files');
+
+          foreach($files as $file)
+          {
+            $filename = Str::random(). filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
+            $file->move(attachments_path(), $filename);
+            $article->attachments()->create([
+              'filename' => $filename,
+              'bytes'=> $file->getSize();
+              'mime'=> $file->getClientMimeType();
+            ]);
+          }
         }
 
         // 태그 싱크
