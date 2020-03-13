@@ -37,5 +37,25 @@ class DatabaseSeeder extends Seeder
         );
       }
       $this->command->info('seeded:article_tag table');
+
+      //parent comments
+      $articles->each(function ($article){
+        $article->comments()->save(factory(App\Comment::class)->make());
+        $article->comments()->save(factory(App\Comment::class)->make());
+      });
+      //child comments
+      $articles->each(function ($article) use ($faker){
+        $commentIds = App\Comment::pluck('id')->toArray();
+
+        foreach(range(1,5) as $index){
+          $article->comments()->save(
+              factory(App\Comment::class)->make([
+                'parent_id'=>$faker->randomElement($commentIds),
+              ])
+          );
+        }
+      });
+
+      $this->command->info('Seeded:comments table');
     }
 }

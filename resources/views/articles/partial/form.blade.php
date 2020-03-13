@@ -29,7 +29,7 @@
 </div> --}}
 <div class="form-group">
   <label for="my-dropzone">파일</label>
-  <div id="my-dropzone" class="dropzone form-controll"></div>
+    <div id="my-dropzone" class="dropzone"></div>
 </div>
 @section('script')
   @parent

@@ -8,6 +8,9 @@
 
     <p>{{$article->content}}</p>
   </article>
+  <div class="container__comment">
+      @include('comments.index')
+  </div>
   <div class="text-center action__article">
     @can('update', $article)
     <a href="{{ route('articles.edit',$article->id) }}" class="btn btn-info">
@@ -23,6 +26,7 @@
       <i class="fa fa-list"></i> Article List
     </a>
   </div>
+
 @stop
 
 @section('script')

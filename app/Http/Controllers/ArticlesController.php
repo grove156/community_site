@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Article;
+use App\Http\Requests\ArticlesRequest;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use File;
+
 class ArticlesController extends Controller
 {
     public function __construct()
@@ -42,12 +46,12 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(\App\Http\Requests\ArticlesRequest $request, Article $article)
+    public function store(ArticlesRequest $request, Article $article)
     {
 
-        //$article = $user->articles()->create(
-        //    $request->getPayload()
-        //  );
+        $article = $user->articles()->create(
+            $request->getPayload()
+          );
         if(! $article){
           flash()->error(
             trans('forum.article.error_writing')
@@ -55,27 +59,27 @@ class ArticlesController extends Controller
           return back()->withInput();
         }
 
-//        if($request->hasFile('files')){
-//          $files = $request->file('files');
-//
-//          foreach($files as $file)
-//          {
-//            $filename = Str::random(). filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
-//            $file->move(attachments_path(), $filename);
-//            $article->attachments()->create([
-//              'filename' => $filename,
-//              'bytes'=> $file->getSize();
-//              'mime'=> $file->getClientMimeType();
-//            ]);
-//          }
-//        }
+       if($request->hasFile('files')){
+          $files = $request->file('files');
+
+          foreach($files as $file)
+          {
+            $filename = Str::random(). filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
+            $file->move(attachments_path(), $filename);
+            $article->attachments()->create([
+              'filename' => $filename,
+              'bytes'=> $file->getSize(),
+              'mime'=> $file->getClientMimeType(),
+            ]);
+          }
+        }
 
         // 태그 싱크
         $article = $request->user()->articles()->create($request->all());
         $article->tags()->sync($request->input('tags'));
-      //  $article->save();
+        $article->save();
 
-      //  return redirect('articles');
+       return redirect('articles');
     }
 
     /**
@@ -87,7 +91,8 @@ class ArticlesController extends Controller
     public function show(Article $article)
     {
         //
-        return view('articles.show', compact('article'));
+        $comments = $article->comments()->with('replies')->whereNull('parent_id')->latest()->get();
+        return view('articles.show', compact('article','comments'));
     }
 
     /**

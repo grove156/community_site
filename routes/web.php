@@ -96,3 +96,7 @@ Route::get('social/{provider}',[
   'as'=>'social.login',
   'uses'=>'SocialController@execute',
 ]);
+
+//comments controller
+Route::resource('comments','CommentsController',['only'=>['update','destroy']]);
+Route::resource('articles.comments', 'commentsController',['only'=>'store']);

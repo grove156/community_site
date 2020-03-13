@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Attachment;
+use App\Article;
+use Illuminate\Database\Eloquent\Collection;
 
 class ArticlesRequest extends FormRequest
 {
